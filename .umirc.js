@@ -9,7 +9,7 @@ export default {
       routes: [
         { path: '/', component: '../pages/index' },
         { path: '/entity', component: '../pages/entity/index' },
-        { path: '/block', component: '../pages/DiscountBlockComponent2' }
+        { path: '/discountBlock', component: '../pages/discountBlock' }
       ]
     }
   ],

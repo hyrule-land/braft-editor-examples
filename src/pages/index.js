@@ -6,8 +6,6 @@ import { Button } from 'antd';
 import TableBlock, { tableBlockImportFn, tableBlockExportFn } from './tableBlock/index';
 import tableData from './tableData';
 
-console.log(tableBlockExportFn);
-
 // 定义上文提到的 blockRenderFn  tableBlockImportFn 
 // 定义一个新的block类型：table_block_render
 const blockRenderFn = (contentBlock, { editor, editorState }) => {
@@ -26,7 +24,10 @@ const blockRenderFn = (contentBlock, { editor, editorState }) => {
 export default class BasicDemo extends React.Component {
   state = {
     editorState: BraftEditor.createEditorState(null,
-      { tableBlockImportFn, tableBlockExportFn})
+      {
+        blockImportFn: tableBlockImportFn,
+        blockExportFn: tableBlockExportFn
+      })
   }
 
   componentDidMount () {
@@ -107,13 +108,16 @@ export default class BasicDemo extends React.Component {
             value={editorState}
             onChange={this.handleChange}
             blockRendererFn={blockRenderFn}
-            converts={{ tableBlockImportFn , tableBlockExportFn }}
+            converts={{
+              blockImportFn: tableBlockImportFn,
+              blockExportFn: tableBlockExportFn
+            }}
             imageControls={['align-left','align-center','align-right','size','remove']}
             stripPastedStyles={false}
             lineHeights={[1.5, 1.75, 2, 2.5, 3, 4]}
           />
         </div>
-        <h5>输出内容:</h5>
+        <h5>输出的 html 字符串内容:</h5>
         <div className="output-content">{outputHTML}</div>
       </div>
     )

@@ -15,27 +15,24 @@ const discountBlockHtml = (blockData) => {
 }
 
 const tableBlockExportFn = (contentState, block) => {
-  return ` <div class="discount-coupon-element">
-    hello world
-  </div>`;
-  // debugger;
-  // console.log(block)
-  // if (block.type === 'atomic') {
-  //  let ranges = block.entityRanges.length  >  0 ? block.entityRanges[0] : -1;
-  //  if (ranges !== -1 ){
-  //    let entity = contentState.getEntity(contentState.getBlockForKey(block.key).getEntityAt(0))
-  //    if (entity.getType() === "table_block_render") {
-  //      let blockData = entity.getData()
-  //      return  discountBlockHtml(blockData)
-  //    }
-  //  }
-  // }
+  console.log(block)
+  debugger;
+  if (block.type === 'atomic') {
+   let ranges = block.entityRanges.length  >  0 ? block.entityRanges[0] : -1;
+   if (ranges !== -1 ){
+     let entity = contentState.getEntity(contentState.getBlockForKey(block.key).getEntityAt(0))
+     if (entity.getType() === "table_block_render") {
+       let blockData = entity.getData()
+       return  discountBlockHtml(blockData)
+     }
+   }
+  }
   
-  // // 导入空格
-  // if(block.type === "unstyled" &&  !block.text.length) {
-  //   debugger;
-  //   return `<p><br/>hahahah</p>`
-  // }
+  // 导入空格
+  if(block.type === "unstyled" &&  !block.text.length) {
+    debugger;
+    return `<p><br/></p>`
+  }  
 }
 
 export { tableBlockImportFn, tableBlockExportFn };
