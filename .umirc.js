@@ -7,7 +7,9 @@ export default {
       path: '/',
       component: '../layouts/index',
       routes: [
-        { path: '/', component: '../pages/index' }
+        { path: '/', component: '../pages/index' },
+        { path: '/entity', component: '../pages/entity/index' },
+        { path: '/block', component: '../pages/DiscountBlockComponent2' }
       ]
     }
   ],

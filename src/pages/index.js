@@ -3,16 +3,19 @@ import React from 'react';
 import BraftEditor from 'braft-editor';
 import { ContentUtils } from 'braft-utils';
 import { Button } from 'antd';
-import DiscountBlockComponent from './DiscountBlockComponent';
+import TableBlock, { tableBlockImportFn, tableBlockExportFn } from './tableBlock/index';
+import tableData from './tableData';
 
-// 定义上文提到的 blockRenderFn  blockImportFn 
-// 定义一个新的block类型：discount_coupon_render
-const  blockRenderFn = (contentBlock, { editor, editorState }) => {
+console.log(tableBlockExportFn);
+
+// 定义上文提到的 blockRenderFn  tableBlockImportFn 
+// 定义一个新的block类型：table_block_render
+const blockRenderFn = (contentBlock, { editor, editorState }) => {
   if (contentBlock.getType() === 'atomic'  ) {
-    const  entity = editorState.getCurrentContent().getEntity(contentBlock.getEntityAt(0))
-    if(entity.getType() ===  "discount_coupon_render"){
+    const entity = editorState.getCurrentContent().getEntity(contentBlock.getEntityAt(0))
+    if(entity.getType() ===  "table_block_render"){
       return {
-        component: DiscountBlockComponent,
+        component: TableBlock,
         editable: false, // editable并不代表组件内容实际可编辑，强烈建议设置为false
         props: { editor, editorState } // 传入的内容可以在组件中通过this.props.blockProps获取到
       }
@@ -20,65 +23,16 @@ const  blockRenderFn = (contentBlock, { editor, editorState }) => {
   }
 }
 
-// 自定义 html 转block的输入转换器，用于将符合规则的html内容转换成相应的block
-const blockImportFn = (nodeName, node) => {
-    
-}
-
-const discountBlockHtml = (address,text) => {
-  return ` <div class="discount-coupon-element">
-    <a href=${address} rel="noopener noreferrer" class="discount-coupon-container" target="_blank"
-    >
-      <div class="discount-coupon-item">
-        ${text}
-        <div class="discount-coupon-item-circle-second">
-        </div>
-      </div>
-      <div class="discount-coupon-item-get">
-        <p>点击</p>
-        <p>领券</p>
-      </div>
-    </a>
-  </div>`
-
-}
-
-const blockExportFn = (contentState, block) => {
-  if (block.type === 'atomic') {
-   let  ranges  = block.entityRanges.length  >  0 ? block.entityRanges[0] : -1;
-   if(ranges  !== -1 ){
-     let   entity = contentState.getEntity(contentState.getBlockForKey(block.key).getEntityAt(0))
-     // console.log(contentState.getLastCreatedEntityKey())
-     if(entity.getType() === "discount_coupon_render"){
-       let  blockData = entity.getData()
-       return  discountBlockHtml(blockData.discount_address,blockData.discount_text)
-     }
-   }
-  }
-  // 导入空格
-  if(block.type === "unstyled" &&  !block.text.length){
-    return `<p><br/></p>`
-  }
-  
-}
-
-
 export default class BasicDemo extends React.Component {
-
   state = {
-    editorState:BraftEditor.createEditorState(null,
-      { blockImportFn ,blockExportFn}),
-    outputHTML: '<p></p>'
+    editorState: BraftEditor.createEditorState(null,
+      { tableBlockImportFn, tableBlockExportFn})
   }
 
   componentDidMount () {
-    this.isLivinig = true
-    // 3秒后更改编辑器内容
-    // setTimeout(this.setEditorContentAsync, 3000)
   }
 
   componentWillUnmount () {
-    this.isLivinig = false
   }
 
   handleChange = (editorState) => {
@@ -88,22 +42,51 @@ export default class BasicDemo extends React.Component {
     })
   }
 
-  setEditorContentAsync = () => {
-    this.isLivinig && this.setState({
-      editorState: BraftEditor.createEditorState('<p>你好，<b>世界!</b><p>')
+  test = () => {    
+  }
+
+  insertTableBlock = () => {
+    const { editorState } = this.state;
+    this.setState({
+      editorState: ContentUtils.insertAtomicBlock(editorState, 'table_block_render', true, {
+        data: tableData,
+        direction: 'row',
+        width: 500,
+        align: 'center'
+      })
     })
   }
 
-  test = () => {
+  logOutputHtml = () => {
+    const { editorState } = this.state;
+    console.log(editorState.toHTML());
+  }
+
+  test2 = () => {
+    const abc = ContentUtils;
+    console.log(abc);
+    
     const { editorState } = this.state;
     debugger;
+    // this.setState({
+    //   editorState: ContentUtils.insertHTML(editorState, dom)
+    // })
 
-    let discount_text = "优惠券"
-    let  link_address = "优惠券地址"
+    const styleMap = {
+      'STRIKETHROUGH': {
+        textDecoration: 'line-through',
+      },
+    };
+    
+
+    const textDom = `##数据项##`
+
     this.setState({
-      editorState: ContentUtils.insertAtomicBlock (editorState, 'discount_coupon_render', true, {
-        discount_text: discount_text,
-        discount_address: link_address
+      editorState: ContentUtils.insertText(editorState, textDom, null, {
+        type: 'EMOTICON',
+        mutability: 'IMMUTABLE',
+        data: {
+        }
       })
     })
   }
@@ -114,20 +97,23 @@ export default class BasicDemo extends React.Component {
 
     return (
       <div>
+        <Button onClick={this.insertTableBlock}>insert table block</Button>
         <Button onClick={this.test}>test</Button>
+
+        <Button onClick={this.test2}>插入数据项</Button>
+        <Button onClick={this.logOutputHtml}>打印 html</Button>
         <div className="editor-wrapper">
           <BraftEditor
             value={editorState}
             onChange={this.handleChange}
-
             blockRendererFn={blockRenderFn}
-            converts={{ blockImportFn ,blockExportFn }}
+            converts={{ tableBlockImportFn , tableBlockExportFn }}
             imageControls={['align-left','align-center','align-right','size','remove']}
             stripPastedStyles={false}
             lineHeights={[1.5, 1.75, 2, 2.5, 3, 4]}
           />
         </div>
-        <h5>输出内容</h5>
+        <h5>输出内容:</h5>
         <div className="output-content">{outputHTML}</div>
       </div>
     )
