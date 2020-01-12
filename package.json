@@ -11,7 +11,10 @@
     "antd": "^3.19.5",
     "braft-editor": "^2.3.8",
     "braft-utils": "^3.0.12",
+    "classnames": "^2.2.6",
     "dva": "^2.6.0-beta.6",
+    "immutable": "^4.0.0-rc.12",
+    "lodash": "^4.17.15",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "shortid": "^2.2.15"

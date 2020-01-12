@@ -3,19 +3,27 @@ import React from 'react';
 import BraftEditor from 'braft-editor';
 import { ContentUtils } from 'braft-utils';
 import { Button } from 'antd';
-import TableBlock, { tableBlockImportFn, tableBlockExportFn } from './tableBlock/index';
-import tableData from './tableData';
+// import TableBlock, { tableBlockImportFn, tableBlockExportFn } from './tableBlock2/index';
+import { tableData1 } from './tableData';
+import './tableBlock2/index.less'
+import TableBlock, { tableBlockImportFn, tableBlockExportFn } from './tableBlock/index'
 
-// 定义上文提到的 blockRenderFn  tableBlockImportFn 
-// 定义一个新的block类型：table_block_render
-const blockRenderFn = (contentBlock, { editor, editorState }) => {
-  if (contentBlock.getType() === 'atomic'  ) {
-    const entity = editorState.getCurrentContent().getEntity(contentBlock.getEntityAt(0))
-    if(entity.getType() ===  "table_block_render"){
+const blockRenderFn = (block, { editor, editorState }) => {
+  if (block.getType() === 'braft_table_block') {
+    return {
+      component: TableBlock,
+      editable: false, 
+      props: { editor, editorState }
+    }
+  }
+
+  if (block.getType() === 'atomic'  ) {
+    const entity = editorState.getCurrentContent().getEntity(block.getEntityAt(0))
+    if(entity.getType() ===  "braft_table_block"){
       return {
         component: TableBlock,
-        editable: false, // editable并不代表组件内容实际可编辑，强烈建议设置为false
-        props: { editor, editorState } // 传入的内容可以在组件中通过this.props.blockProps获取到
+        editable: false,
+        props: { editor, editorState }
       }
     }
   }
@@ -23,7 +31,7 @@ const blockRenderFn = (contentBlock, { editor, editorState }) => {
 
 export default class BasicDemo extends React.Component {
   state = {
-    editorState: BraftEditor.createEditorState(null,
+    editorState: BraftEditor.createEditorState(`<div class="tableContainer">hahahahah<div>`,
       {
         blockImportFn: tableBlockImportFn,
         blockExportFn: tableBlockExportFn
@@ -49,9 +57,8 @@ export default class BasicDemo extends React.Component {
   insertTableBlock = () => {
     const { editorState } = this.state;
     this.setState({
-      editorState: ContentUtils.insertAtomicBlock(editorState, 'table_block_render', true, {
-        data: tableData,
-        direction: 'row',
+      editorState: ContentUtils.insertAtomicBlock(editorState, 'braft_table_block', true, {
+        tableData: tableData1,
         width: 500,
         align: 'center'
       })
@@ -68,7 +75,6 @@ export default class BasicDemo extends React.Component {
     console.log(abc);
     
     const { editorState } = this.state;
-    debugger;
     // this.setState({
     //   editorState: ContentUtils.insertHTML(editorState, dom)
     // })
@@ -98,6 +104,13 @@ export default class BasicDemo extends React.Component {
 
     return (
       <div>
+
+        <div style={{
+          padding: '50px 150px'
+        }}>
+          <TableBlock />
+        </div>
+
         <Button onClick={this.insertTableBlock}>insert table block</Button>
         <Button onClick={this.test}>test</Button>
 

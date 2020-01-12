@@ -1,95 +1,192 @@
 import React, { Component } from 'react';
 import { ContentUtils } from 'braft-utils';
+import classNames from 'classnames';
+import { Button } from 'antd';
 import shortid from 'shortid';
-import styles from './index.less'
+import _get from 'lodash/get';
+import './index.less';
+
+// 判断数据类型
+function getType(obj){
+  return Object.prototype.toString.call(obj).replace(/^\[object (\S+)\]$/, '$1');
+}
+
+const BLOCK_TYPE = 'braft_table_block';
 
 const tableBlockImportFn = (nodeName, node) => {
-  debugger;
 }
 
-const discountBlockHtml = (blockData) => {
-  console.log(blockData);
-  return ` <div class="discount-coupon-element">
-    hello world
-  </div>`
-}
-
+// 自定义block输出转换器，用于将不同的block转换成不同的html内容，通常与blockImportFn中定义的输入转换规则相对应
 const tableBlockExportFn = (contentState, block) => {
-  console.log(block)
-  debugger;
-  if (block.type === 'atomic') {
-   let ranges = block.entityRanges.length  >  0 ? block.entityRanges[0] : -1;
-   if (ranges !== -1 ){
-     let entity = contentState.getEntity(contentState.getBlockForKey(block.key).getEntityAt(0))
-     if (entity.getType() === "table_block_render") {
-       let blockData = entity.getData()
-       return  discountBlockHtml(blockData)
-     }
-   }
+  // if (block.getType() === 'braft_table_block') {
+  //   return {
+  //     component: NewTableBlock,
+  //     editable: false, 
+  //     props: { editor, editorState }
+  //   }
+  // }
+
+  // if (block.getType() === 'atomic'  ) {
+  //   const entity = editorState.getCurrentContent().getEntity(block.getEntityAt(0))
+  //   if(entity.getType() ===  "braft_table_block"){}
+  // }
+
+
+  if (block.type === BLOCK_TYPE) {
+    const { dataB } = block.data
+
+    return {
+      start: `<div class="my-block-bar" data-b="${dataB}">`,
+      end: '</div>'
+    }
+
   }
-  
-  // 导入空格
-  if(block.type === "unstyled" &&  !block.text.length) {
-    debugger;
-    return `<p><br/></p>`
-  }  
+
+  if (block.type === 'atomic') {
+    let ranges = block.entityRanges.length  >  0 ? block.entityRanges[0] : -1;
+    if (ranges !== -1 ){
+      let entity = contentState.getEntity(contentState.getBlockForKey(block.key).getEntityAt(0))
+      if (entity.getType() === BLOCK_TYPE) {
+        let blockData = entity.getData();
+        console.log(blockData);
+        return (
+          <div className="my-block-bar"></div>
+        )
+      }
+    }
+   }
+
 }
 
 export { tableBlockImportFn, tableBlockExportFn };
 
 export default class TableBlock extends Component {
   state = {
-    showDelButton: false
+    removeButtonVisible: false,
+    newTableData: []
   }
 
-  onShowDelButton = () => {
+  onTableMouseEnter = () => {
     this.setState({
-      showDelButton: true
+      removeButtonVisible: true
     })
   }
 
-  onHideDelButton = ()=>{
+  onTableMouseLeave = () => {
     this.setState({
-      showDelButton: false
+      removeButtonVisible: false
     })
   }
-  // 注意：通过blockRendererFn定义的block，无法在编辑器中直接删除，需要在组件中增加删除按钮
-  removeBarBlock = () => {
+
+  // 删除 block
+  removeBlock = () => {
     this.props.blockProps.editor.setValue(ContentUtils.removeBlock(this.props.blockProps.editorState, this.props.block))
   }
 
   render () {
-    const blockData  = this.props.contentState.getEntity(this.props.block.getEntityAt(0)).getData()
 
-    const { data, direction } = blockData;
+    const thisProps = this.props;
+    let blockData = null;
+    // const tableData = []
 
-    console.log("blockData", blockData)
+    if (_get(thisProps, 'block.getData')) {
+      blockData = this.props.block.getData();
+    }
+
+    const entity = _get(thisProps, 'block.getEntityAt') && this.props.block.getEntityAt(0)
+    if (this.props.contentState && entity) {
+      blockData = this.props.contentState.getEntity(this.props.block.getEntityAt(0)).getData()
+    }
+
+    // const typeVerifier = Object.prototype.toString.call;
+
+    // 入参的类型判断，blockData 必须要是个二维数组
+    if (blockData !== null) {
+      if (getType(blockData) !== 'Object') {
+        throw new Error ('blockData should be an object')
+      }
+
+      const { tableData } = blockData;
+      // debugger;
+      if (!tableData) {
+        throw new Error ('property "tableData" is required!');
+      }
+      if (getType(tableData) !== 'Array') {
+        throw new Error ('property "tableData" should be an array');
+      }
+      tableData.forEach(item => {
+        if (getType(item) !== 'Array') {
+          throw new Error ('children of "tableData" should be an array');
+        }
+      })
+
+      // this.setState({
+      //   newTableData: tableData
+      // })
+    }
+    
+    const { removeButtonVisible } = this.state;
+
+    const tdRender = (data) => {
+      return data.map((item, index) => {
+        if (getType(item) === 'Object') {
+          // const { tdProperties = {} } = item;
+
+          if (item.data) {
+            return (
+              <td
+                key={shortid.generate()}
+                className={classNames({
+                  'header': item.isHeader,
+                })} {...item.tdProperties}>{item.data}</td>
+            )
+          }
+          return (
+            <td key={shortid.generate()}></td>
+          )
+        }
+        return (
+          <td key={shortid.generate()}>{item}</td>
+        )
+      })
+    }
+
+    const tableRender = () => {
+      if (blockData !== null && blockData.hasOwnProperty('tableData') && getType(blockData.tableData) === 'Array') {
+        return blockData.tableData.map((item, index) => {
+          return (
+            <tr key={shortid.generate()}>
+              {tdRender(item)}
+            </tr>
+          )
+        })
+      }
+      return null
+    }
 
     return (
-      <div className={styles.tableContainer} >
-        <table border="1">
+      <div 
+        className="braft_table_block_container"
+        onMouseLeave={() =>this.onTableMouseLeave()}
+        onMouseEnter={() =>this.onTableMouseEnter()}
+      >
+        <div className="removeButtonWrapper">
+          <Button size="small" onClick={this.removeBlock} className="removeButton" style={{
+            display: removeButtonVisible ? 'block' : 'none'
+          }}>
+            删除
+          </Button>
+        </div>        
+        
+        <table>
           <tbody>
-            <tr>
-              {
-                data.map(item => item.key).map(item => {
-                  return (
-                    <td key={shortid.generate()}>{item}</td>
-                  )
-                })
-              }
-            </tr>
-            <tr>
-              {
-                data.map(item => item.value).map(item => {
-                  return (
-                    <td key={shortid.generate()}>{item}</td>
-                  )
-                })
-              }
-            </tr>
-          </tbody>        
+            {
+              tableRender()
+              // blockData !== null
+              // tableRender(blockData.tableData)
+            }
+          </tbody>
         </table>
-        <button onClick={this.removeBarBlock}>delete</button>
       </div>
     )
   }

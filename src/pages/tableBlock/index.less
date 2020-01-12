@@ -1,3 +1,56 @@
-.tableContainer {
-  background-color: #f2f2f2;
+:global {
+  .braft_table_block_container {
+    position: relative;
+
+    .removeButtonWrapper {
+      position: absolute;
+      top: -42px;
+      left: 0;
+      padding: 10px 50px 10px 0;
+      background-color: transparent;
+    }
+    .removeButton {
+    }
+
+    table {
+      border: 1px solid #e8e8e8;
+      width: 100%;
+      text-align: center;
+      border-radius: 4px 4px 0 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 14px;
+      line-height: 1.5;
+      border-right: 0;
+      border-bottom: 0;
+    }
+
+    tbody {
+      display: table-row-group;
+      vertical-align: middle;
+      border-color: inherit;
+    }
+
+    tr {
+      display: table-row;
+      vertical-align: inherit;
+      border-color: inherit;
+      transition: all 0.3s, height 0s;
+    }
+
+    tr > td {
+      border-right: 1px solid #e8e8e8;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 16px 16px;
+      overflow-wrap: break-word;
+      display: table-cell;
+      vertical-align: inherit;
+      transition: all 0.3s, height 0s;
+    }
+
+    tr > td.header {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+  }
 }
