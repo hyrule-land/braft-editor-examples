@@ -3,9 +3,7 @@ import React from 'react';
 import BraftEditor from 'braft-editor';
 import { ContentUtils } from 'braft-utils';
 import { Button } from 'antd';
-// import TableBlock, { tableBlockImportFn, tableBlockExportFn } from './tableBlock2/index';
 import { tableData1 } from './tableData';
-import './tableBlock2/index.less'
 import TableBlock, { tableBlockImportFn, tableBlockExportFn } from './tableBlock/index'
 
 const blockRenderFn = (block, { editor, editorState }) => {
@@ -29,19 +27,15 @@ const blockRenderFn = (block, { editor, editorState }) => {
   }
 }
 
+const initialHtml = `<p>hahahahah</p><div class="braft_table_block_container" data-block-data="{&quot;tableData&quot;:[[{&quot;data&quot;:&quot;坪山区&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;rowSpan&quot;:2}},&quot;大鹏区&quot;,&quot;罗湖区&quot;,&quot;光明新区&quot;,&quot;南山区&quot;,&quot;龙华区&quot;,&quot;盐田区&quot;,&quot;宝安区&quot;,&quot;龙岗区&quot;,&quot;福田区&quot;],[&quot;aaaaa&quot;,{&quot;data&quot;:&quot;aaaaffffff&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;colSpan&quot;:2}},&quot;ejeajfaf&quot;,&quot;poijjkk&quot;,&quot;kkkkkk&quot;,&quot;dddddddaa&quot;,&quot;ooekfkkam&quot;,&quot;dpljjjjj&quot;,&quot;wwwwwwwwww&quot;,&quot;kkkkkkkk&quot;]],&quot;width&quot;:500,&quot;align&quot;:&quot;center&quot;}"> </div><p></p><div class="braft_table_block_container" data-block-data="{&quot;tableData&quot;:[[{&quot;data&quot;:&quot;坪山区&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;rowSpan&quot;:2}},&quot;大鹏区&quot;,&quot;罗湖区&quot;,&quot;光明新区&quot;,&quot;南山区&quot;,&quot;龙华区&quot;,&quot;盐田区&quot;,&quot;宝安区&quot;,&quot;龙岗区&quot;,&quot;福田区&quot;],[&quot;aaaaa&quot;,{&quot;data&quot;:&quot;aaaaffffff&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;colSpan&quot;:2}},&quot;ejeajfaf&quot;,&quot;poijjkk&quot;,&quot;kkkkkk&quot;,&quot;dddddddaa&quot;,&quot;ooekfkkam&quot;,&quot;dpljjjjj&quot;,&quot;wwwwwwwwww&quot;,&quot;kkkkkkkk&quot;]],&quot;width&quot;:500,&quot;align&quot;:&quot;center&quot;}"> </div><p></p><div class="braft_table_block_container" data-block-data="{&quot;tableData&quot;:[[{&quot;data&quot;:&quot;坪山区&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;rowSpan&quot;:2}},&quot;大鹏区&quot;,&quot;罗湖区&quot;,&quot;光明新区&quot;,&quot;南山区&quot;,&quot;龙华区&quot;,&quot;盐田区&quot;,&quot;宝安区&quot;,&quot;龙岗区&quot;,&quot;福田区&quot;],[&quot;aaaaa&quot;,{&quot;data&quot;:&quot;aaaaffffff&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;colSpan&quot;:2}},&quot;ejeajfaf&quot;,&quot;poijjkk&quot;,&quot;kkkkkk&quot;,&quot;dddddddaa&quot;,&quot;ooekfkkam&quot;,&quot;dpljjjjj&quot;,&quot;wwwwwwwwww&quot;,&quot;kkkkkkkk&quot;]],&quot;width&quot;:500,&quot;align&quot;:&quot;center&quot;}"> </div><p></p>`;
+
 export default class BasicDemo extends React.Component {
   state = {
-    editorState: BraftEditor.createEditorState(`<div class="tableContainer">hahahahah<div>`,
+    editorState: BraftEditor.createEditorState(initialHtml,
       {
         blockImportFn: tableBlockImportFn,
         blockExportFn: tableBlockExportFn
       })
-  }
-
-  componentDidMount () {
-  }
-
-  componentWillUnmount () {
   }
 
   handleChange = (editorState) => {
@@ -51,9 +45,7 @@ export default class BasicDemo extends React.Component {
     })
   }
 
-  test = () => {    
-  }
-
+  // 插入表格
   insertTableBlock = () => {
     const { editorState } = this.state;
     this.setState({
@@ -104,7 +96,6 @@ export default class BasicDemo extends React.Component {
 
     return (
       <div>
-
         <div style={{
           padding: '50px 150px'
         }}>

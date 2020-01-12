@@ -14,32 +14,25 @@ function getType(obj){
 const BLOCK_TYPE = 'braft_table_block';
 
 const tableBlockImportFn = (nodeName, node) => {
+  if (nodeName === 'div' && node.classList.contains('braft_table_block_container')) {
+    const blockData = JSON.parse(node.dataset.blockData)
+
+    return {
+      type: BLOCK_TYPE,
+      data: {
+        blockData
+      }
+    }
+  }
 }
 
 // 自定义block输出转换器，用于将不同的block转换成不同的html内容，通常与blockImportFn中定义的输入转换规则相对应
 const tableBlockExportFn = (contentState, block) => {
-  // if (block.getType() === 'braft_table_block') {
-  //   return {
-  //     component: NewTableBlock,
-  //     editable: false, 
-  //     props: { editor, editorState }
-  //   }
-  // }
-
-  // if (block.getType() === 'atomic'  ) {
-  //   const entity = editorState.getCurrentContent().getEntity(block.getEntityAt(0))
-  //   if(entity.getType() ===  "braft_table_block"){}
-  // }
-
-
   if (block.type === BLOCK_TYPE) {
-    const { dataB } = block.data
-
-    return {
-      start: `<div class="my-block-bar" data-b="${dataB}">`,
-      end: '</div>'
-    }
-
+    const blockData = block.data
+    return (
+      <div className="braft_table_block_container" data-block-data={JSON.stringify(blockData)}></div>
+    )
   }
 
   if (block.type === 'atomic') {
@@ -49,13 +42,14 @@ const tableBlockExportFn = (contentState, block) => {
       if (entity.getType() === BLOCK_TYPE) {
         let blockData = entity.getData();
         console.log(blockData);
+
+        // 需要提供一个接口来单独保存blockData
         return (
-          <div className="my-block-bar"></div>
+          <div className="braft_table_block_container" data-block-data={JSON.stringify(blockData)}></div>
         )
       }
     }
    }
-
 }
 
 export { tableBlockImportFn, tableBlockExportFn };
@@ -86,15 +80,18 @@ export default class TableBlock extends Component {
   render () {
 
     const thisProps = this.props;
+
     let blockData = null;
     // const tableData = []
 
     if (_get(thisProps, 'block.getData')) {
-      blockData = this.props.block.getData();
+      console.log(11111);
+      blockData = this.props.block.getData().get('blockData');
     }
 
     const entity = _get(thisProps, 'block.getEntityAt') && this.props.block.getEntityAt(0)
     if (this.props.contentState && entity) {
+      console.log(22222);
       blockData = this.props.contentState.getEntity(this.props.block.getEntityAt(0)).getData()
     }
 
@@ -102,12 +99,13 @@ export default class TableBlock extends Component {
 
     // 入参的类型判断，blockData 必须要是个二维数组
     if (blockData !== null) {
+      // debugger;
       if (getType(blockData) !== 'Object') {
         throw new Error ('blockData should be an object')
       }
 
       const { tableData } = blockData;
-      // debugger;
+
       if (!tableData) {
         throw new Error ('property "tableData" is required!');
       }
@@ -119,18 +117,21 @@ export default class TableBlock extends Component {
           throw new Error ('children of "tableData" should be an array');
         }
       })
-
-      // this.setState({
-      //   newTableData: tableData
-      // })
     }
     
     const { removeButtonVisible } = this.state;
 
-    const tdRender = (data) => {
+    // 允许自定义单元格的内容，通过传入 tdRender 属性就行
+    const tdRender = (item) => {
+      if (item.tdRender) {
+        return item.tdRender(item.data)
+      }
+      return item.data
+    }
+
+    const tableCellRender = (data) => {
       return data.map((item, index) => {
         if (getType(item) === 'Object') {
-          // const { tdProperties = {} } = item;
 
           if (item.data) {
             return (
@@ -138,7 +139,11 @@ export default class TableBlock extends Component {
                 key={shortid.generate()}
                 className={classNames({
                   'header': item.isHeader,
-                })} {...item.tdProperties}>{item.data}</td>
+                })} {...item.tdExtarAttributes}>
+                  {
+                    tdRender(item)
+                  }
+                </td>
             )
           }
           return (
@@ -156,7 +161,7 @@ export default class TableBlock extends Component {
         return blockData.tableData.map((item, index) => {
           return (
             <tr key={shortid.generate()}>
-              {tdRender(item)}
+              {tableCellRender(item)}
             </tr>
           )
         })
@@ -182,8 +187,6 @@ export default class TableBlock extends Component {
           <tbody>
             {
               tableRender()
-              // blockData !== null
-              // tableRender(blockData.tableData)
             }
           </tbody>
         </table>
