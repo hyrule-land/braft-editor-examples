@@ -138,13 +138,18 @@ export default class BasicDemo extends React.Component {
 
     return (
       <div>
-        <div style={{
-          padding: '50px 150px'
-        }}>
+        <div>
           <TableBlock />
         </div>
 
-        <div style={{ marginBottom: 30 }}>
+        <div style={{
+          marginBottom: 30,
+          padding: 20
+        }}>
+          <p>支持 container 样式的自定义</p>
+          <p>支持 table 样式的自定义</p>
+          <p>支持每一个单元格样式的自定义（宽度/颜色等），或者单元格 render 的自定义，支持合并单元格等等，设置 isHeader 属性，可以将单元格设置成表头的样式</p>
+          <p>请确保 table 是一个 二维数组，所以可能需要自己写一个数据格式转换的方法</p>
           <Button type="primary" onClick={this.insertTableBlock1} style={{ marginRight: 20 }}>插入一个简单的表格</Button>
           <Button type="primary" onClick={this.insertTableBlock2} style={{ marginRight: 20 }}>插入一个竖向居中的表格</Button>
           <Button type="primary" onClick={this.insertTableBlock3} style={{ marginRight: 20 }}>插入一个带表头的表格</Button>
