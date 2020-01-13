@@ -148,6 +148,12 @@ export default class BasicDemo extends React.Component {
           marginBottom: 30,
           padding: 20
         }}>
+          <p 
+            style={{
+              color: 'red',
+              fontSize: '30px',
+              textAlign: 'center'
+          }}>该功能的灵活性，几乎满足大家对于插入表格的所有需求，可自定义的程度非常高，每一个单元格都可以自定义</p>
           <p>支持 container 样式的自定义</p>
           <p>支持 table 样式的自定义</p>
           <p>支持每一个单元格样式的自定义（宽度/颜色等），甚至自定义单元格的 render 方法，支持合并单元格（rowSpan, colSpan）等等，设置 isHeader 属性，可以将单元格设置成表头的样式</p>
