@@ -4,10 +4,10 @@ import BraftEditor from 'braft-editor';
 import { ContentUtils } from 'braft-utils';
 import { Button } from 'antd';
 import { tableData1, tableData2, tableData3, tableData4 } from './tableData';
-import TableBlock, { tableBlockImportFn, tableBlockExportFn } from './tableBlock/index'
+import TableBlock, { tableBlockImportFn, tableBlockExportFn, BLOCK_TYPE } from './tableBlock/index'
 
 const blockRenderFn = (block, { editor, editorState }) => {
-  if (block.getType() === 'braft_table_block') {
+  if (block.getType() === BLOCK_TYPE) {
     return {
       component: TableBlock,
       editable: false, 
@@ -50,7 +50,7 @@ export default class BasicDemo extends React.Component {
   insertTableBlock1 = () => {
     const { editorState } = this.state;
     this.setState({
-      editorState: ContentUtils.insertAtomicBlock(editorState, 'braft_table_block', true, {
+      editorState: ContentUtils.insertAtomicBlock(editorState, BLOCK_TYPE, true, {
         tableData: tableData1
       })
     })
@@ -60,7 +60,7 @@ export default class BasicDemo extends React.Component {
   insertTableBlock2 = () => {
     const { editorState } = this.state;
     this.setState({
-      editorState: ContentUtils.insertAtomicBlock(editorState, 'braft_table_block', true, {
+      editorState: ContentUtils.insertAtomicBlock(editorState, BLOCK_TYPE, true, {
         tableData: tableData2,
         tableExtarAttrs: {
           style: {
@@ -84,7 +84,7 @@ export default class BasicDemo extends React.Component {
   insertTableBlock3 = () => {
     const { editorState } = this.state;
     this.setState({
-      editorState: ContentUtils.insertAtomicBlock(editorState, 'braft_table_block', true, {
+      editorState: ContentUtils.insertAtomicBlock(editorState, BLOCK_TYPE, true, {
         tableData: tableData3
       })
     })
@@ -93,7 +93,7 @@ export default class BasicDemo extends React.Component {
   insertTableBlock4 = () => {
     const { editorState } = this.state;
     this.setState({
-      editorState: ContentUtils.insertAtomicBlock(editorState, 'braft_table_block', true, {
+      editorState: ContentUtils.insertAtomicBlock(editorState, BLOCK_TYPE, true, {
         tableData: tableData4
       })
     })
@@ -106,7 +106,7 @@ export default class BasicDemo extends React.Component {
 
   test2 = () => {
     const abc = ContentUtils;
-    console.log(abc);
+    // console.log(abc);
     
     const { editorState } = this.state;
     // this.setState({
