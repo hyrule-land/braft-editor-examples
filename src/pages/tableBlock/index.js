@@ -15,7 +15,12 @@ function getType (obj) {
 
 const tableBlockImportFn = (nodeName, node) => {
   if (nodeName === 'div' && node.classList.contains('braft_table_block_container')) {
-    const blockData = JSON.parse(node.dataset.blockData)
+    let blockData = JSON.parse(node.dataset.blockData)
+
+    // 不知道在哪个地方的问题导致对象嵌套了一层，原因不好找，暂时这样子处理
+    if (blockData.blockData) {
+      blockData = blockData.blockData;
+    }
 
     return {
       type: BLOCK_TYPE,
@@ -29,7 +34,12 @@ const tableBlockImportFn = (nodeName, node) => {
 // 自定义block输出转换器，用于将不同的block转换成不同的html内容，通常与blockImportFn中定义的输入转换规则相对应
 const tableBlockExportFn = (contentState, block) => {
   if (block.type === BLOCK_TYPE) {
-    const blockData = block.data
+    let blockData = block.data;
+
+    // 不知道在哪个地方的问题导致对象嵌套了一层，原因不好找，暂时这样子处理
+    if (blockData.blockData) {
+      blockData = blockData.blockData;
+    }
     return (
       <div className="braft_table_block_container" data-block-data={JSON.stringify(blockData)}></div>
     )
@@ -41,7 +51,11 @@ const tableBlockExportFn = (contentState, block) => {
       let entity = contentState.getEntity(contentState.getBlockForKey(block.key).getEntityAt(0))
       if (entity.getType() === BLOCK_TYPE) {
         let blockData = entity.getData();
-        // console.log(blockData);
+
+        // 不知道在哪个地方的问题导致对象嵌套了一层，原因不好找，暂时这样子处理
+        if (blockData.blockData) {
+          blockData = blockData.blockData;
+        }
 
         // 也可以提供一个接口来单独保存blockData
         return (
