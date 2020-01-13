@@ -56,7 +56,7 @@ export default class BasicDemo extends React.Component {
     })
   }
 
-  // 插入一个竖向的表格
+  // 插入一个竖向居中的表格
   insertTableBlock2 = () => {
     const { editorState } = this.state;
     this.setState({
@@ -69,7 +69,8 @@ export default class BasicDemo extends React.Component {
         },
         containerExtarAttrs: {
           style: {
-            textAlign: 'center',
+            display: 'flex',
+            justifyContent: 'center',
             background: '#fafafa',
             padding: 30
           }
@@ -145,7 +146,7 @@ export default class BasicDemo extends React.Component {
 
         <div style={{ marginBottom: 30 }}>
           <Button type="primary" onClick={this.insertTableBlock1} style={{ marginRight: 20 }}>插入一个简单的表格</Button>
-          <Button type="primary" onClick={this.insertTableBlock2} style={{ marginRight: 20 }}>插入一个竖向的表格</Button>
+          <Button type="primary" onClick={this.insertTableBlock2} style={{ marginRight: 20 }}>插入一个竖向居中的表格</Button>
           <Button type="primary" onClick={this.insertTableBlock3} style={{ marginRight: 20 }}>插入一个带表头的表格</Button>
           <Button type="primary" onClick={this.insertTableBlock4} style={{ marginRight: 20 }}>插入一个超级复杂的表格（支持样式的自定义）</Button>
           <Button onClick={this.logOutputHtml}>在控制台打印 html</Button>
