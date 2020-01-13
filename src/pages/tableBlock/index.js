@@ -6,12 +6,12 @@ import shortid from 'shortid';
 import _get from 'lodash/get';
 import './index.less';
 
+const BLOCK_TYPE = 'braft_table_block';
+
 // 判断数据类型
-function getType(obj){
+function getType (obj) {
   return Object.prototype.toString.call(obj).replace(/^\[object (\S+)\]$/, '$1');
 }
-
-const BLOCK_TYPE = 'braft_table_block';
 
 const tableBlockImportFn = (nodeName, node) => {
   if (nodeName === 'div' && node.classList.contains('braft_table_block_container')) {
@@ -41,7 +41,7 @@ const tableBlockExportFn = (contentState, block) => {
       let entity = contentState.getEntity(contentState.getBlockForKey(block.key).getEntityAt(0))
       if (entity.getType() === BLOCK_TYPE) {
         let blockData = entity.getData();
-        console.log(blockData);
+        // console.log(blockData);
 
         // 也可以提供一个接口来单独保存blockData
         return (
@@ -78,21 +78,17 @@ export default class TableBlock extends Component {
   }
 
   render () {
-
+    const { removeButtonVisible } = this.state;
     const thisProps = this.props;
-    debugger;
 
     let blockData = null;
-    // const tableData = []
 
     if (_get(thisProps, 'block.getData')) {
-      // console.log(11111);
       blockData = this.props.block.getData().get('blockData');
     }
 
     const entity = _get(thisProps, 'block.getEntityAt') && this.props.block.getEntityAt(0)
     if (this.props.contentState && entity) {
-      // console.log(22222);
       blockData = this.props.contentState.getEntity(this.props.block.getEntityAt(0)).getData()
     }
 
@@ -117,8 +113,6 @@ export default class TableBlock extends Component {
     //     }
     //   })
     // }
-    
-    const { removeButtonVisible } = this.state;
 
     // 允许自定义单元格的内容，通过传入 tdRender 属性就行
     const tdRender = (item) => {
@@ -139,7 +133,9 @@ export default class TableBlock extends Component {
                   key={shortid.generate()}
                   className={classNames({
                     'header': item.isHeader,
-                  })} {...item.tdExtarAttrs}>
+                  })} {...item.tdExtarAttrs} style={{
+                    ...item.style
+                  }}>
                     {
                       tdRender(item)
                     }
@@ -171,12 +167,30 @@ export default class TableBlock extends Component {
 
     const tableRender = () => {
       if (blockData !== null && blockData.hasOwnProperty('tableData') && getType(blockData.tableData) === 'Array') {
+        const { tableSize, containerExtarAttrs, tableExtarAttrs, tableData, tableStyle, containerStyle } = blockData;
+
+        let tableSizeClassName = 'size_default'
+        if (tableSize) {
+          if (tableSize === 'default') {
+            tableSizeClassName = 'size_default';
+          }
+          if (tableSize === 'middle') {
+            tableSizeClassName = 'size_middle';
+          }
+          if (tableSize === 'small') {
+            tableSizeClassName = 'size_small';
+          }
+        }
+
         return (
           <div
             className="braft_table_block_container"
             onMouseLeave={() =>this.onTableMouseLeave()}
             onMouseEnter={() =>this.onTableMouseEnter()}
-            {...blockData.containerExtarAttrs}
+            {...containerExtarAttrs}
+            style={{
+              ...containerStyle
+            }}
           >
             <div className="removeButtonWrapper">
               <Button size="small" onClick={this.removeBlock} className="removeButton" style={{
@@ -186,10 +200,18 @@ export default class TableBlock extends Component {
               </Button>
             </div>        
             
-            <table {...blockData.tableExtarAttrs}>
+            <table
+              {...tableExtarAttrs}
+              className={classNames({
+                [tableSizeClassName]: true,
+              })}
+              style={{
+                ...tableStyle
+              }}
+            >
               <tbody>
                 {
-                  trRender(blockData.tableData)
+                  trRender(tableData)
                 }
               </tbody>
             </table>

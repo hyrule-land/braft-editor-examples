@@ -1,3 +1,5 @@
+import React from 'react';
+import { Badge, Icon, Button } from 'antd';
 
 const tableData1 = [
   ['坪山区', '大鹏区', '罗湖区', '光明新区', '南山区', '龙华区', '盐田区', '宝安区', '龙岗区', '福田区'],
@@ -43,21 +45,36 @@ const tableData4 = [
   ['aaaaa', {
     data: 'aaaaffffff',
     isHeader: true,
-    // 允许自定义 td 的属性
+    // 允许自定义 td 标签的额外属性，可以用来做单元格合并等等
     tdExtarAttrs: {
       colSpan: 2,
-      style: {
-        background: 'cyan',
-        textAlign: 'left'
-      },
+    },
+    // 允许自定义单元格的 style
+    style: {
+      background: '#deedff',
+      textAlign: 'left'
     },
     // 允许通过传入 tdRender 属性，来自定义单元格的内容
     tdRender: (data) => {
       return (
-        <button>{data + 122333}</button>
+        <div>
+          <Button type="danger">删除</Button>
+          <Badge count={99} dot>
+            <Icon type="notification" />
+          </Badge>
+        </div>
       )
     }
-  }, 'ejeajfaf', 'poijjkk', 'kkkkkk', 'dddddddaa', 'ooekfkkam', 'dpljjjjj']
+  }, 'ejeajfaf', 'poijjkk', 'kkkkkk', {
+    data: '这是一个合并的单元格',
+    tdExtarAttrs: {
+      colSpan: 4,
+    },
+    style: {
+      color: 'red',
+      fontWeight: 'bold'
+    }
+  }]
 ]
 
 export { tableData1, tableData2, tableData3, tableData4 }

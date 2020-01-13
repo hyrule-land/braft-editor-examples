@@ -51,7 +51,8 @@ export default class BasicDemo extends React.Component {
     const { editorState } = this.state;
     this.setState({
       editorState: ContentUtils.insertAtomicBlock(editorState, BLOCK_TYPE, true, {
-        tableData: tableData1
+        tableData: tableData1,
+        tableSize: 'middle',
       })
     })
   }
@@ -62,18 +63,23 @@ export default class BasicDemo extends React.Component {
     this.setState({
       editorState: ContentUtils.insertAtomicBlock(editorState, BLOCK_TYPE, true, {
         tableData: tableData2,
+        tableSize: 'small',
+        // table 标签额外的属性
         tableExtarAttrs: {
-          style: {
-            width: 300,
-          }
         },
+        // container 额外的属性
         containerExtarAttrs: {
-          style: {
-            display: 'flex',
-            justifyContent: 'center',
-            background: '#fafafa',
-            padding: 30
-          }
+        },
+        // 表格 table 标签的 style
+        tableStyle: {
+          width: 300,
+        },
+        // 表格外层 container 的 style，可以用来设置表格的对齐（居中等等）
+        containerStyle: {
+          display: 'flex',
+          justifyContent: 'center',
+          background: '#fafafa',
+          padding: 30
         }
       })
     })
@@ -106,12 +112,8 @@ export default class BasicDemo extends React.Component {
 
   test2 = () => {
     const abc = ContentUtils;
-    // console.log(abc);
     
     const { editorState } = this.state;
-    // this.setState({
-    //   editorState: ContentUtils.insertHTML(editorState, dom)
-    // })
 
     const styleMap = {
       'STRIKETHROUGH': {
@@ -148,8 +150,10 @@ export default class BasicDemo extends React.Component {
         }}>
           <p>支持 container 样式的自定义</p>
           <p>支持 table 样式的自定义</p>
-          <p>支持每一个单元格样式的自定义（宽度/颜色等），或者单元格 render 的自定义，支持合并单元格等等，设置 isHeader 属性，可以将单元格设置成表头的样式</p>
-          <p>请确保 table 是一个 二维数组，所以可能需要自己写一个数据格式转换的方法</p>
+          <p>支持每一个单元格样式的自定义（宽度/颜色等），甚至自定义单元格的 render 方法，支持合并单元格（rowSpan, colSpan）等等，设置 isHeader 属性，可以将单元格设置成表头的样式</p>
+          <p>请确保 table 是一个 二维数组，二维数组的每一项对应一个单元格，所以可能需要自己写一个数据格式转换的方法</p>
+          <p>每个单元格的数据，可以是字符串，数字，或者一个对象（数据请写在 data 属性里面）</p>
+          <p>tableSize: 'default' | 'middle' | 'small'，作用跟 antd 的 table 的 size 属性一样</p>
           <Button type="primary" onClick={this.insertTableBlock1} style={{ marginRight: 20 }}>插入一个简单的表格</Button>
           <Button type="primary" onClick={this.insertTableBlock2} style={{ marginRight: 20 }}>插入一个竖向居中的表格</Button>
           <Button type="primary" onClick={this.insertTableBlock3} style={{ marginRight: 20 }}>插入一个带表头的表格</Button>
