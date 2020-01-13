@@ -43,7 +43,7 @@ const tableBlockExportFn = (contentState, block) => {
         let blockData = entity.getData();
         console.log(blockData);
 
-        // 需要提供一个接口来单独保存blockData
+        // 也可以提供一个接口来单独保存blockData
         return (
           <div className="braft_table_block_container" data-block-data={JSON.stringify(blockData)}></div>
         )
@@ -52,7 +52,7 @@ const tableBlockExportFn = (contentState, block) => {
    }
 }
 
-export { tableBlockImportFn, tableBlockExportFn };
+export { BLOCK_TYPE, tableBlockImportFn, tableBlockExportFn };
 
 export default class TableBlock extends Component {
   state = {
@@ -80,42 +80,43 @@ export default class TableBlock extends Component {
   render () {
 
     const thisProps = this.props;
+    debugger;
 
     let blockData = null;
     // const tableData = []
 
     if (_get(thisProps, 'block.getData')) {
-      console.log(11111);
+      // console.log(11111);
       blockData = this.props.block.getData().get('blockData');
     }
 
     const entity = _get(thisProps, 'block.getEntityAt') && this.props.block.getEntityAt(0)
     if (this.props.contentState && entity) {
-      console.log(22222);
+      // console.log(22222);
       blockData = this.props.contentState.getEntity(this.props.block.getEntityAt(0)).getData()
     }
 
     // 入参的类型判断，blockData 必须要是个二维数组
-    if (blockData !== null) {
-      // debugger;
-      if (getType(blockData) !== 'Object') {
-        throw new Error ('blockData should be an object')
-      }
+    // if (blockData !== null) {
+    //   // debugger;
+    //   if (getType(blockData) !== 'Object') {
+    //     throw new Error ('blockData should be an object')
+    //   }
 
-      const { tableData } = blockData;
+    //   const { tableData } = blockData;
 
-      if (!tableData) {
-        throw new Error ('property "tableData" is required!');
-      }
-      if (getType(tableData) !== 'Array') {
-        throw new Error ('property "tableData" should be an array');
-      }
-      tableData.forEach(item => {
-        if (getType(item) !== 'Array') {
-          throw new Error ('children of "tableData" should be an array');
-        }
-      })
-    }
+    //   if (!tableData) {
+    //     throw new Error ('property "tableData" is required!');
+    //   }
+    //   if (getType(tableData) !== 'Array') {
+    //     throw new Error ('property "tableData" should be an array');
+    //   }
+    //   tableData.forEach(item => {
+    //     if (getType(item) !== 'Array') {
+    //       throw new Error ('children of "tableData" should be an array');
+    //     }
+    //   })
+    // }
     
     const { removeButtonVisible } = this.state;
 
@@ -128,30 +129,34 @@ export default class TableBlock extends Component {
     }
 
     const tableCellRender = (data) => {
-      return data.map((item, index) => {
-        if (getType(item) === 'Object') {
-
-          if (item.data) {
+      if (getType(blockData.tableData) === 'Array') {
+        return data.map((item, index) => {
+          if (getType(item) === 'Object') {
+  
+            if (item.data) {
+              return (
+                <td
+                  key={shortid.generate()}
+                  className={classNames({
+                    'header': item.isHeader,
+                  })} {...item.tdExtarAttrs}>
+                    {
+                      tdRender(item)
+                    }
+                  </td>
+              )
+            }
             return (
-              <td
-                key={shortid.generate()}
-                className={classNames({
-                  'header': item.isHeader,
-                })} {...item.tdExtarAttrs}>
-                  {
-                    tdRender(item)
-                  }
-                </td>
+              <td key={shortid.generate()}></td>
             )
           }
           return (
-            <td key={shortid.generate()}></td>
+            <td key={shortid.generate()}>{item}</td>
           )
-        }
-        return (
-          <td key={shortid.generate()}>{item}</td>
-        )
-      })
+        })
+      } else {
+        return null
+      }      
     }
 
     const trRender = (tableData) => {
