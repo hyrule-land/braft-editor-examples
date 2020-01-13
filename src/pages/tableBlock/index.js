@@ -95,8 +95,6 @@ export default class TableBlock extends Component {
       blockData = this.props.contentState.getEntity(this.props.block.getEntityAt(0)).getData()
     }
 
-    // const typeVerifier = Object.prototype.toString.call;
-
     // 入参的类型判断，blockData 必须要是个二维数组
     if (blockData !== null) {
       // debugger;
@@ -139,7 +137,7 @@ export default class TableBlock extends Component {
                 key={shortid.generate()}
                 className={classNames({
                   'header': item.isHeader,
-                })} {...item.tdExtarAttributes}>
+                })} {...item.tdExtarAttrs}>
                   {
                     tdRender(item)
                   }
@@ -156,41 +154,46 @@ export default class TableBlock extends Component {
       })
     }
 
+    const trRender = (tableData) => {
+      return tableData.map((item, index) => {
+        return (
+          <tr key={shortid.generate()}>
+            {tableCellRender(item)}
+          </tr>
+        )
+      })
+    }
+
     const tableRender = () => {
       if (blockData !== null && blockData.hasOwnProperty('tableData') && getType(blockData.tableData) === 'Array') {
-        return blockData.tableData.map((item, index) => {
-          return (
-            <tr key={shortid.generate()}>
-              {tableCellRender(item)}
-            </tr>
-          )
-        })
+        return (
+          <div
+            className="braft_table_block_container"
+            onMouseLeave={() =>this.onTableMouseLeave()}
+            onMouseEnter={() =>this.onTableMouseEnter()}
+            {...blockData.containerExtarAttrs}
+          >
+            <div className="removeButtonWrapper">
+              <Button size="small" onClick={this.removeBlock} className="removeButton" style={{
+                display: removeButtonVisible ? 'block' : 'none'
+              }}>
+                删除
+              </Button>
+            </div>        
+            
+            <table {...blockData.tableExtarAttrs}>
+              <tbody>
+                {
+                  trRender(blockData.tableData)
+                }
+              </tbody>
+            </table>
+          </div>
+        )
       }
       return null
     }
 
-    return (
-      <div 
-        className="braft_table_block_container"
-        onMouseLeave={() =>this.onTableMouseLeave()}
-        onMouseEnter={() =>this.onTableMouseEnter()}
-      >
-        <div className="removeButtonWrapper">
-          <Button size="small" onClick={this.removeBlock} className="removeButton" style={{
-            display: removeButtonVisible ? 'block' : 'none'
-          }}>
-            删除
-          </Button>
-        </div>        
-        
-        <table>
-          <tbody>
-            {
-              tableRender()
-            }
-          </tbody>
-        </table>
-      </div>
-    )
+    return tableRender()
   }
 }

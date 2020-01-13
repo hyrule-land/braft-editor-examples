@@ -3,7 +3,7 @@ import React from 'react';
 import BraftEditor from 'braft-editor';
 import { ContentUtils } from 'braft-utils';
 import { Button } from 'antd';
-import { tableData1 } from './tableData';
+import { tableData1, tableData2, tableData3, tableData4 } from './tableData';
 import TableBlock, { tableBlockImportFn, tableBlockExportFn } from './tableBlock/index'
 
 const blockRenderFn = (block, { editor, editorState }) => {
@@ -27,7 +27,7 @@ const blockRenderFn = (block, { editor, editorState }) => {
   }
 }
 
-const initialHtml = `<p>hahahahah</p><div class="braft_table_block_container" data-block-data="{&quot;tableData&quot;:[[{&quot;data&quot;:&quot;坪山区&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;rowSpan&quot;:2}},&quot;大鹏区&quot;,&quot;罗湖区&quot;,&quot;光明新区&quot;,&quot;南山区&quot;,&quot;龙华区&quot;,&quot;盐田区&quot;,&quot;宝安区&quot;,&quot;龙岗区&quot;,&quot;福田区&quot;],[&quot;aaaaa&quot;,{&quot;data&quot;:&quot;aaaaffffff&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;colSpan&quot;:2}},&quot;ejeajfaf&quot;,&quot;poijjkk&quot;,&quot;kkkkkk&quot;,&quot;dddddddaa&quot;,&quot;ooekfkkam&quot;,&quot;dpljjjjj&quot;,&quot;wwwwwwwwww&quot;,&quot;kkkkkkkk&quot;]],&quot;width&quot;:500,&quot;align&quot;:&quot;center&quot;}"> </div><p></p><div class="braft_table_block_container" data-block-data="{&quot;tableData&quot;:[[{&quot;data&quot;:&quot;坪山区&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;rowSpan&quot;:2}},&quot;大鹏区&quot;,&quot;罗湖区&quot;,&quot;光明新区&quot;,&quot;南山区&quot;,&quot;龙华区&quot;,&quot;盐田区&quot;,&quot;宝安区&quot;,&quot;龙岗区&quot;,&quot;福田区&quot;],[&quot;aaaaa&quot;,{&quot;data&quot;:&quot;aaaaffffff&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;colSpan&quot;:2}},&quot;ejeajfaf&quot;,&quot;poijjkk&quot;,&quot;kkkkkk&quot;,&quot;dddddddaa&quot;,&quot;ooekfkkam&quot;,&quot;dpljjjjj&quot;,&quot;wwwwwwwwww&quot;,&quot;kkkkkkkk&quot;]],&quot;width&quot;:500,&quot;align&quot;:&quot;center&quot;}"> </div><p></p><div class="braft_table_block_container" data-block-data="{&quot;tableData&quot;:[[{&quot;data&quot;:&quot;坪山区&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;rowSpan&quot;:2}},&quot;大鹏区&quot;,&quot;罗湖区&quot;,&quot;光明新区&quot;,&quot;南山区&quot;,&quot;龙华区&quot;,&quot;盐田区&quot;,&quot;宝安区&quot;,&quot;龙岗区&quot;,&quot;福田区&quot;],[&quot;aaaaa&quot;,{&quot;data&quot;:&quot;aaaaffffff&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;colSpan&quot;:2}},&quot;ejeajfaf&quot;,&quot;poijjkk&quot;,&quot;kkkkkk&quot;,&quot;dddddddaa&quot;,&quot;ooekfkkam&quot;,&quot;dpljjjjj&quot;,&quot;wwwwwwwwww&quot;,&quot;kkkkkkkk&quot;]],&quot;width&quot;:500,&quot;align&quot;:&quot;center&quot;}"> </div><p></p>`;
+const initialHtml = `<div class="braft_table_block_container" data-block-data="{&quot;tableData&quot;:[[{&quot;data&quot;:&quot;坪山区&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;rowSpan&quot;:2}},&quot;大鹏区&quot;,&quot;罗湖区&quot;,&quot;光明新区&quot;,&quot;南山区&quot;,&quot;龙华区&quot;,&quot;盐田区&quot;,&quot;宝安区&quot;,&quot;龙岗区&quot;,&quot;福田区&quot;],[&quot;aaaaa&quot;,{&quot;data&quot;:&quot;aaaaffffff&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;colSpan&quot;:2}},&quot;ejeajfaf&quot;,&quot;poijjkk&quot;,&quot;kkkkkk&quot;,&quot;dddddddaa&quot;,&quot;ooekfkkam&quot;,&quot;dpljjjjj&quot;,&quot;wwwwwwwwww&quot;,&quot;kkkkkkkk&quot;]],&quot;width&quot;:500,&quot;align&quot;:&quot;center&quot;}"> </div><p></p><div class="braft_table_block_container" data-block-data="{&quot;tableData&quot;:[[{&quot;data&quot;:&quot;坪山区&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;rowSpan&quot;:2}},&quot;大鹏区&quot;,&quot;罗湖区&quot;,&quot;光明新区&quot;,&quot;南山区&quot;,&quot;龙华区&quot;,&quot;盐田区&quot;,&quot;宝安区&quot;,&quot;龙岗区&quot;,&quot;福田区&quot;],[&quot;aaaaa&quot;,{&quot;data&quot;:&quot;aaaaffffff&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;colSpan&quot;:2}},&quot;ejeajfaf&quot;,&quot;poijjkk&quot;,&quot;kkkkkk&quot;,&quot;dddddddaa&quot;,&quot;ooekfkkam&quot;,&quot;dpljjjjj&quot;,&quot;wwwwwwwwww&quot;,&quot;kkkkkkkk&quot;]],&quot;width&quot;:500,&quot;align&quot;:&quot;center&quot;}"> </div><p></p><div class="braft_table_block_container" data-block-data="{&quot;tableData&quot;:[[{&quot;data&quot;:&quot;坪山区&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;rowSpan&quot;:2}},&quot;大鹏区&quot;,&quot;罗湖区&quot;,&quot;光明新区&quot;,&quot;南山区&quot;,&quot;龙华区&quot;,&quot;盐田区&quot;,&quot;宝安区&quot;,&quot;龙岗区&quot;,&quot;福田区&quot;],[&quot;aaaaa&quot;,{&quot;data&quot;:&quot;aaaaffffff&quot;,&quot;isHeader&quot;:true,&quot;tdProperties&quot;:{&quot;colSpan&quot;:2}},&quot;ejeajfaf&quot;,&quot;poijjkk&quot;,&quot;kkkkkk&quot;,&quot;dddddddaa&quot;,&quot;ooekfkkam&quot;,&quot;dpljjjjj&quot;,&quot;wwwwwwwwww&quot;,&quot;kkkkkkkk&quot;]],&quot;width&quot;:500,&quot;align&quot;:&quot;center&quot;}"> </div><p></p>`;
 
 export default class BasicDemo extends React.Component {
   state = {
@@ -45,14 +45,55 @@ export default class BasicDemo extends React.Component {
     })
   }
 
-  // 插入表格
-  insertTableBlock = () => {
+  // 插入一个简单的表格
+  // tableData 需要是一个二维数组
+  insertTableBlock1 = () => {
     const { editorState } = this.state;
     this.setState({
       editorState: ContentUtils.insertAtomicBlock(editorState, 'braft_table_block', true, {
-        tableData: tableData1,
-        width: 500,
-        align: 'center'
+        tableData: tableData1
+      })
+    })
+  }
+
+  // 插入一个竖向的表格
+  insertTableBlock2 = () => {
+    const { editorState } = this.state;
+    this.setState({
+      editorState: ContentUtils.insertAtomicBlock(editorState, 'braft_table_block', true, {
+        tableData: tableData2,
+        tableExtarAttrs: {
+          style: {
+            width: 300,
+          }
+        },
+        containerExtarAttrs: {
+          style: {
+            textAlign: 'center',
+            background: '#fafafa',
+            padding: 30
+          }
+        }
+      })
+    })
+  }
+
+  // 插入一个带表头的表格
+  // tableData 需要是一个二维数组，然后在需要数据项里面设置属性 isHeader: true
+  insertTableBlock3 = () => {
+    const { editorState } = this.state;
+    this.setState({
+      editorState: ContentUtils.insertAtomicBlock(editorState, 'braft_table_block', true, {
+        tableData: tableData3
+      })
+    })
+  }
+
+  insertTableBlock4 = () => {
+    const { editorState } = this.state;
+    this.setState({
+      editorState: ContentUtils.insertAtomicBlock(editorState, 'braft_table_block', true, {
+        tableData: tableData4
       })
     })
   }
@@ -102,12 +143,20 @@ export default class BasicDemo extends React.Component {
           <TableBlock />
         </div>
 
-        <Button onClick={this.insertTableBlock}>insert table block</Button>
-        <Button onClick={this.test}>test</Button>
+        <div style={{ marginBottom: 30 }}>
+          <Button type="primary" onClick={this.insertTableBlock1} style={{ marginRight: 20 }}>插入一个简单的表格</Button>
+          <Button type="primary" onClick={this.insertTableBlock2} style={{ marginRight: 20 }}>插入一个竖向的表格</Button>
+          <Button type="primary" onClick={this.insertTableBlock3} style={{ marginRight: 20 }}>插入一个带表头的表格</Button>
+          <Button type="primary" onClick={this.insertTableBlock4} style={{ marginRight: 20 }}>插入一个超级复杂的表格（支持样式的自定义）</Button>
+          <Button onClick={this.logOutputHtml}>在控制台打印 html</Button>
+        </div>
 
-        <Button onClick={this.test2}>插入数据项</Button>
-        <Button onClick={this.logOutputHtml}>打印 html</Button>
-        <div className="editor-wrapper">
+        {/* <Button onClick={this.test2}>插入数据项</Button> */}
+        
+        <div className="editor-wrapper" style={{
+          border: '1px solid #e8e8e8',
+          margin: 30,
+        }}>
           <BraftEditor
             value={editorState}
             onChange={this.handleChange}
@@ -121,8 +170,16 @@ export default class BasicDemo extends React.Component {
             lineHeights={[1.5, 1.75, 2, 2.5, 3, 4]}
           />
         </div>
-        <h5>输出的 html 字符串内容:</h5>
-        <div className="output-content">{outputHTML}</div>
+
+        <div style={{
+          border: '1px solid #e8e8e8',
+          margin: 30,
+          padding: 20
+        }}>
+          <h1>输出的 html 字符串内容:</h1>
+          <div className="output-content">{outputHTML}</div>
+        </div>
+        
       </div>
     )
 
